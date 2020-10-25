@@ -4,10 +4,11 @@ import socket
 import time
 import datetime
 
+ini_file = 'hosts.ini'
+
 print("---IP Port Monitor Started---\n")
 
-hosts = ['192.168.1.1', '192.168.1.2', '192.168.1.188', '192.168.1.253', '192.168.1.254']
-port = 80
+port = 22
 
 def time_now():
     time_is = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S ")
@@ -21,11 +22,13 @@ def check_up():
     return result
 
 while True:
-    for host in hosts:
-        if check_up():
-            print(str(time_now()) + str(host) + ":" + str(port) + " looks down")
-        else:
-            #pass
-            print(str(time_now()) + str(host) + ":" + str(port) + " looks up")
+    with open(ini_file) as hosts:
+        for host in hosts:
+            host = host.strip()
+            if check_up():
+                print(str(time_now()) + str(host) + ":" + str(port) + " looks down")
+            else:
+                pass
+                #print(str(time_now()) + str(host) + ":" + str(port) + " looks up")
     print("\n")
     time.sleep(1)
